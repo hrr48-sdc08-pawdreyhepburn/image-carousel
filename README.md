@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# image-carousel
-=======
 # Carousel
 Image Carousel
 
@@ -27,4 +24,3 @@ Testing Script: npm test
 
 Have Fun!
 
->>>>>>> ea0c987b43054c93a77fae6ddadc63cc33350026
