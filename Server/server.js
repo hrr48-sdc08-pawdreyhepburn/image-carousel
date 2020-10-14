@@ -9,9 +9,9 @@ const template = require('./template.js');
 
 app.use(express.static(path.join(__dirname, '/../dist')));
 
-app.get('/', (req, res) => {
-  // res.end('Baby Steps!')  
-})
+// app.get('/', (req, res) => {
+//   // res.end('Baby Steps!')  
+// })
 
 // app.get('/products', function(req, res) {
 //   Image.find({}, function(err, result) {
@@ -22,6 +22,8 @@ app.get('/', (req, res) => {
 //   }
 //   })
 // });
+
+
 
 app.get('/:itemId', function(req, res) {
   res.send(template);
