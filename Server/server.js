@@ -9,9 +9,13 @@ const template = require('./template.js');
 
 app.use(express.static(path.join(__dirname, '/../dist')));
 
+// below doesn't do anything 
+
 // app.get('/', (req, res) => {
 //   // res.end('Baby Steps!')  
 // })
+
+//below doesn't do anything 
 
 // app.get('/products', function(req, res) {
 //   Image.find({}, function(err, result) {
@@ -24,7 +28,7 @@ app.use(express.static(path.join(__dirname, '/../dist')));
 // });
 
 
-
+// added template so we can now change items based on URL
 app.get('/:itemId', function(req, res) {
   res.send(template);
 });
