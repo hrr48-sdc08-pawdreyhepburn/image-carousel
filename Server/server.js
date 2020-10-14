@@ -43,9 +43,9 @@ app.get('/products/:product/', function(req, res) {
   }
   });
 
-app.post('/products/add/:newData', function (req, res) {
-  var addThis = req.params.newData
-  Image.create(addThis) 
+app.post('/products/add/product', function (req, res) {
+  newProduct = req.body;  
+  Image.create(newProduct) 
     .then(() => {Image.find({}).then((results) => {res.send(results)})})   
     .catch((error) => {res.send(error)})
 });
@@ -57,9 +57,10 @@ app.delete('/products/delete/:id', function (req, res) {
 
 app.put('/products/update/:id', function (req, res) {
   var id = req.params.id
-  var updateHere = req.params.update
-  Image.updateOne( {_id: id}, updateHere)
-  .catch((error) => { res.send(error) })
+  var updateThis = req.body
+  Image.updateOne( {_id: id}, updateThis)
+  .then(() => {res.send('it made it')})
+  .catch((error) => { res.send(error) });
 })
 
 
