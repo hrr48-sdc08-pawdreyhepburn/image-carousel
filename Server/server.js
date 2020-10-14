@@ -45,7 +45,7 @@ app.get('/products/:product/', function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(result);
   }
-  });
+});
 
 app.post('/products/add/product', function (req, res) {
   newProduct = req.body;  
@@ -66,10 +66,6 @@ app.put('/products/update/:id', function (req, res) {
   .then(() => {res.send(updatThis)})
   .catch((error) => { res.send(error) });
 })
-
-
-
-
 
 });
 
