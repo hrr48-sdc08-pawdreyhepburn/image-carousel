@@ -63,7 +63,7 @@ app.put('/products/update/:id', function (req, res) {
   var id = req.params.id
   var updateThis = req.body
   Image.updateOne( {_id: id}, updateThis)
-  .then(() => {res.send(updatThis)})
+  .then(() => {res.send(updateThis)})
   .catch((error) => { res.send(error) });
 })
 
