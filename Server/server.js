@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const Image = require('../DB/image.js')
+const Image = require('../DB/index.js')
 const bodyParser = require('body-parser')
 app.use(express.json());
 const path = require('path');
