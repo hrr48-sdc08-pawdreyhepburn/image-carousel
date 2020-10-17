@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --verbose -u",
     "start": "nodemon ./Server/index.js",
-    "dbSetup": "node DB/seed.js",
+    "generateData": "node DB/generateData.js",
     "build": "webpack --config webpack.config.js"
   },
   "repository": {

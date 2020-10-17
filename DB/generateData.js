@@ -69,8 +69,6 @@ if(isMainThread) {
   let time2 = performance.now()
   const time = time2 - time1;
   console.log(`${workerId} took ${time} miliseconds to write ${testData.length} datapoints`)
-
-
-
+  
 }
 
