@@ -3,7 +3,7 @@ const { Worker, isMainThread } = require('worker_threads');
 const { performance } = require('perf_hooks');
 const fs = require('fs');
 const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
-var concat = require('concat-files');
+
 
 
 if(isMainThread) {  
