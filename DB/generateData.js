@@ -39,7 +39,7 @@ if(isMainThread) {
   generateFakeData = () => {
     let record = {}
     record.id = count;
-    record.product = Math.floor(Math.random() * 750) + 1;
+    record.product = Math.floor(Math.random() * 1000000) + 1;
     record.imageName = faker.commerce.productName();
     record.color = faker.commerce.color();
     record.url = faker.image.imageUrl();
@@ -61,8 +61,10 @@ if(isMainThread) {
   let time1 = performance.now()
   let testData = dataGenerator(2000000);
   // let dataJSON = JSON.stringify(testData);
+  let csvHeader = csv.getHeaderString();
   let csvString = csv.stringifyRecords(testData);
   const stream = fs.createWriteStream(`data/testData${workerId}.csv`);
+  stream.write(csvHeader);
   stream.write(csvString);
   stream.end();  
   //csv.writeRecords(dataJSON);
