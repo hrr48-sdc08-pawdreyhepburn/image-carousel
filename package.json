@@ -7,7 +7,8 @@
     "test": "jest --verbose -u",
     "start": "nodemon ./Server/index.js",
     "generateData": "node --experimental-worker DB/generateData.js",
-    "seedDB": "node DB/seed.js",
+    "generateKT": "node DB/seed.js",
+    "seedDB": "dsbulk load -url ./data/testData1.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData2.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData3.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData4.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData5.csv -k carousel -t imagecarousel",
     "build": "webpack --config webpack.config.js"
   },
   "repository": {
@@ -24,7 +25,7 @@
     "@babel/polyfill": "^7.11.5",
     "body-parser": "^1.19.0",
     "cassandra-driver": "^4.6.0",
-    "concat-files": "^0.1.1",
+    "csv-writer": "^1.6.0",
     "express": "^4.17.1",
     "faker": "^5.1.0",
     "jest-cli": "^26.4.2",

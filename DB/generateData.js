@@ -27,11 +27,12 @@ if(isMainThread) {
 
   const csv = createCsvStringifier ({    
     header: [
-      { id: 'product', title: 'PRODUCT' },
-      { id: 'imageName', title: 'IMAGENAME' }, 
-      { id: 'color', title: 'COLOR' },
-      { id: 'url', title: 'IMAGEURL' },
-      { id: 'alt', title: 'ALT COLOR' }
+      { id: 'id', title: 'id'},
+      { id: 'alt', title: 'alt' },
+      { id: 'color', title: 'color' },
+      { id: 'imageName', title: 'imagename' }, 
+      { id: 'product', title: 'product' },
+      { id: 'url', title: 'url' }
     ]
   });
   
