@@ -46,3 +46,20 @@ Have Fun!
 - Put : '/products/update/:id'
   - updates a product with a matching id number, the update will be contained in the req.body   
 
+# Connect to CassandraDB 
+
+- Install Apache Cassandra DB 
+  - You must have the latest version of Java 8 installed 
+
+- To connect to Cassandra and initiate the keyspace and table 
+  - $ npm run generateKT 
+
+# Generate Data 
+ - Once you have Cassandra and Java installed to generate data run this command in the terminal: 
+   - $ npm run generateData
+This will generate 5 different CSV files for you to seed into the database. 
+
+# Seed Cassandra Database
+
+- If you are ready to seed the data from the previous step, please type in this command in the terminal:
+ - npm run seedDB

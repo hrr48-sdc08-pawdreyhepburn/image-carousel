@@ -18,9 +18,6 @@ const imageCarouselTable =
   alt text
 )`;
 
-
-//dsbulk load -url ./data -k carousel -t imagecarousel
-
 client.connect()
 .then(() => {  
   console.log('connected to database :')  
@@ -34,7 +31,4 @@ client.connect()
 .then(() => {
   client.execute(imageCarouselTable)
 })
-// .then(() => {
-//   client.execute(fakeData1)
-// })
 .catch((error) => {console.log(error)});
