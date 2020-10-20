@@ -60,6 +60,7 @@ Have Fun!
 This will generate 5 different CSV files for you to seed into the database. 
 
 # Seed Cassandra Database
-
+- This seeding script depends on having dsbulk installed from datastax 
+- To install dsbulk please go to this link https://docs.datastax.com/en/dsbulk/doc/dsbulk/install/dsbulkInstall.html
 - If you are ready to seed the data from the previous step, please type in this command in the terminal:
  - npm run seedDB

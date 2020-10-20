@@ -1,31 +1,12 @@
 const express = require('express');
 const app = express();
-const Image = require('../DB/index.js')
-const bodyParser = require('body-parser')
+const client = require('../DB/index.js');
 app.use(express.json());
 const path = require('path');
 const babelPolyFill = require('@babel/polyfill');
 const template = require('./template.js');
 
 app.use(express.static(path.join(__dirname, '/../dist')));
-
-// below doesn't do anything 
-
-// app.get('/', (req, res) => {
-//   // res.end('Baby Steps!')  
-// })
-
-//below doesn't do anything 
-
-// app.get('/products', function(req, res) {
-//   Image.find({}, function(err, result) {
-//     if (err) {
-//     throw err;
-//   } else {
-//     res.send(result);
-//   }
-//   })
-// });
 
 
 // added template so we can now change items based on URL
@@ -34,17 +15,14 @@ app.get('/:itemId', function(req, res) {
 });
 
 app.get('/products/:product/', function(req, res) {  
-  var productParam = req.params.product;
-  var colorParam = req.params.color;
-  Image.find({
-      product: productParam
-}, function(err, result) {
-    if (err) {
-    throw err;
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send(result);
-  }
+  let productParam = req.params.product;
+  let colorParam = req.params.color;
+  const query = `SELECT product `
+  
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.send(result);
+  
 });
 
 app.post('/products/add/product', function (req, res) {

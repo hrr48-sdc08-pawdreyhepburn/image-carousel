@@ -11,17 +11,8 @@ if(isMainThread) {
     let work2 = new Worker(__filename);
     let work3 = new Worker(__filename);
     let work4 = new Worker(__filename);
-    let work5 = new Worker(__filename);    
-  // let work6 = new Worker(__filename);
-  // let work7 = new Worker(__filename);
-  // let work8 = new Worker(__filename);
-  // let work9 = new Worker(__filename);
-  // let work10 = new Worker(__filename);
-  // let work11 = new Worker(__filename);
-  // let work12 = new Worker(__filename);
-  // let work13 = new Worker(__filename);
-  // let work14 = new Worker(__filename);
-  // let work15 = new Worker(__filename);  
+    let work5 = new Worker(__filename);  
+ 
 } else {  
   const workerId = require('worker_threads').threadId
 
@@ -32,46 +23,89 @@ if(isMainThread) {
       { id: 'color', title: 'color' },
       { id: 'imageName', title: 'imagename' }, 
       { id: 'product', title: 'product' },
+      { id: 'relatedids', title: 'relatedids' },
       { id: 'url', title: 'url' }
     ]
   });
-  
-  let count = 1;
-  generateFakeData = () => {
-    let record = {}
-    record.id = count;
-    record.product = Math.floor(Math.random() * 1000000) + 1;
-    record.imageName = faker.commerce.productName();
-    record.color = faker.commerce.color();
-    record.url = faker.image.imageUrl();
-    record.alt = faker.commerce.color();           
-    count++
-    return record;
+
+  let generateRandomIds = () => {
+    let ids = '';    
+    let randomNum = Math.floor(Math.random() * 8) + 3;    
+    for(let i = 0; i < randomNum; i++) {
+      let randomId = Math.floor(Math.random() * 1000000) + 1;    
+      ids += randomId.toString() + '-';
+    }
+    return ids.slice(0, -2);
   }
   
-  const dataGenerator = (num) => {       
-    let records = [];
-    for(let i = 0; i < num; i++) {
-      let record = generateFakeData()      
-      records.push(record)
-    }   
-    return records;
+  // let count = 1;
+  // generateFakeData = () => {
+  //   let record = {}
+  //   record._id = count;
+  //   record.product = Math.floor(Math.random() * 1000000) + 1;
+  //   record.imageName = faker.commerce.productName();
+  //   record.color = faker.commerce.color();
+  //   record.url = faker.image.imageUrl();
+  //   record.alt = faker.commerce.color();           
+  //   record.relatedids = generateRandomIds();
+  //   count++
+  //   return record;
+  // }
+  
+  // const dataGenerator = (num) => {       
+  //   let records = [];
+  //   for(let i = 0; i < num; i++) {
+  //     let record = generateFakeData()      
+  //     records.push(record)
+  //   }   
+  //   return records;
+  // }
+
+  let count = 1;   
+  let streamWriter = (numImages) => {    
+    let time1 = performance.now()
+    const stream = fs.createWriteStream(`data/testData${workerId}.csv`);
+    let csvHeader = csv.getHeaderString();
+    stream.write(csvHeader);
+    let num = numImages;    
+    const closedWriter = () => {   
+      let ok = true;         
+      do { 
+        num--;         
+        let id = count;
+        let product = Math.floor(Math.random() * 1000000) + 1;
+        let imagename = faker.commerce.productName();
+        let color = faker.commerce.color();
+        let url = faker.image.imageUrl();
+        let alt = faker.commerce.color();           
+        let relatedids = generateRandomIds();
+        count++;     
+        let csvString = `${id},${alt},${color},${imagename},${product},${relatedids},${url}\n`;         
+        if (num === 0) {                      
+          stream.write(csvString, 'utf8', () => {          
+          stream.end();
+          let time2 = performance.now()
+          const time = time2 - time1;
+          console.log(`${workerId} took ${time} miliseconds to write ${count} datapoints`)
+          });
+        } else {                                    
+          ok = stream.write(csvString, 'utf8');          
+        }       
+        } while (num > 0 && ok);
+        if (num > 0) {
+          stream.once('drain', closedWriter);
+        }
+                   
+    }    
+    closedWriter()
   }
 
   
-  let time1 = performance.now()
-  let testData = dataGenerator(2000000);
-  // let dataJSON = JSON.stringify(testData);
-  let csvHeader = csv.getHeaderString();
-  let csvString = csv.stringifyRecords(testData);
-  const stream = fs.createWriteStream(`data/testData${workerId}.csv`);
-  stream.write(csvHeader);
-  stream.write(csvString);
-  stream.end();  
-  //csv.writeRecords(dataJSON);
-  let time2 = performance.now()
-  const time = time2 - time1;
-  console.log(`${workerId} took ${time} miliseconds to write ${testData.length} datapoints`)
+  
+  streamWriter(2000000);
+  
+  
+  
   
 }
 

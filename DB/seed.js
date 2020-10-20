@@ -12,9 +12,10 @@ const imageCarouselTable =
 `CREATE TABLE IF NOT EXISTS imageCarousel (
   id text PRIMARY KEY,
   product text,
-  imageName text,
+  imagename text,
   color text,
   url text,
+  relatedids text,
   alt text
 )`;
 
@@ -24,11 +25,28 @@ client.connect()
 })
 .then(() => {
   client.execute(keyspaceCarousel)
+  .then(() => {
+    client.execute('use carousel')
+    .then(() => {
+      client.execute(imageCarouselTable)
+      .catch((error) => {
+        console.log(error);
+      })
+    })
+  })
 })
-.then(() => {
-  client.execute('use Carousel')
-})
-.then(() => {
-  client.execute(imageCarouselTable)
-})
-.catch((error) => {console.log(error)});
+
+
+
+
+// client.connect()
+// .then(() => {  
+//   console.log('connected to database :')  
+// .then(() => {
+//   client.execute(keyspaceCarousel)
+// }).then(() => {
+//   client.execute('use carousel;')
+// }).then(() => {
+//   client.execute(imageCarouselTable)
+// })
+// .catch((error) => {console.log(error)});
