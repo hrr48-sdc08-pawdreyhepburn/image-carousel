@@ -33,37 +33,47 @@ app.get('/products/:product/', function(req, res) {
     responseObj.alt = results.rows[0].alt;    
     likeItems = results.rows[0].relatedids.split('-');
     responseArr.push(responseObj);    
-  }).then(() => {
-    for(let i = 0; i < likeItems.length; i++) {
-    let likeObj = {};
-    let likeItemQuery = `select * from carousel.imagecarousel where id = ?`;
-    let likeParams = [`${likeItems[i]}`];
+  })
+  .then(() => {
+    let count = 1;
+    for(let i = 0; i < likeItems.length; i++) {    
+      let likeObj = {};
+      let likeItemQuery = `select * from carousel.imagecarousel where id = ?`;
+      let likeParams = [`${likeItems[i]}`];
       client.execute(likeItemQuery, likeParams)
-      .then((result) => {
+      .then((result) => {      
         likeObj._id = result.rows[0].id;
         likeObj.url = result.rows[0].url;
         likeObj.color = result.rows[0].color;
         likeObj.imagename = result.rows[0].imagename;
         likeObj.alt = result.rows[0].alt;
-        responseArr.push(likeObj);
-      })      
-      .catch((error) => {
-        throw error;
-      })
-    }    
-  }).then(() => {
-     res.setHeader('Access-Control-Allow-Origin', '*');
-     console.log(responseArr);
-     res.send(responseArr);
-  })  
-
+        responseArr.push(likeObj);            
+        count++; 
+        if(count === likeItems.length) {
+        res.setHeader('Access-Control-Allow-Origin', '*'); 
+        res.send(responseArr);    
+        }
+      })       
+      .catch((err) => {
+        console.log(err);
+        res.send('error fetching like IDs');
+      })            
+    }  
+  }) 
 });
 
 
-
-
-
-
+app.get('/all/products', (req, res) => {
+  const query = `select * from carousel.imagecarousel`;
+  client.execute(query)
+  .then((results) => {
+    res.send(results)
+  })
+  .catch((error) => {
+    console.log(error);
+    res.send('error fetching all')
+  })
+})
 
 
 app.post('/products/add/product', function (req, res) {
@@ -73,10 +83,14 @@ app.post('/products/add/product', function (req, res) {
     .catch((error) => {res.send(error)})
 });
 
+
+
 app.delete('/products/delete/:id', function (req, res) {
   var id = req.params.id
   Image.deleteOne( {_id: id}, (error) => { res.send(error) } )
 })
+
+
 
 app.put('/products/update/:id', function (req, res) {
   var id = req.params.id
