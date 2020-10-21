@@ -1,16 +1,11 @@
-const mongoose = require('mongoose');
-const mongoURL = 'mongodb://localhost/carousel';
+const cassandra = require('cassandra-driver');
 
-
-mongoose.connect(mongoURL, { useUnifiedTopology: true, useNewUrlParser: true })
-.then(()=>{
-  console.log(`connection to database established`)
-}).catch(err=>{
- throw err;
-})
-;
-const db = mongoose.connection;
+const client = new cassandra.Client({ 
+  contactPoints:['127.0.0.1:9042'], 
+  credentials: {username: 'cassandra', password: 'cassandra'},
+  localDataCenter: 'datacenter1'
+});
 
 
 
-module.exports = db;
+module.exports = client;

@@ -1,76 +1,61 @@
-const faker = require('faker');
-const { Worker, isMainThread } = require('worker_threads');
-const { performance } = require('perf_hooks');
-const fs = require('fs');
-const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
-var concat = require('concat-files');
+const client = require('./index.js');
 
 
-if(isMainThread) {  
-    let work1 = new Worker(__filename);
-    let work2 = new Worker(__filename);
-    let work3 = new Worker(__filename);
-    let work4 = new Worker(__filename);
-    let work5 = new Worker(__filename);    
-  // let work6 = new Worker(__filename);
-  // let work7 = new Worker(__filename);
-  // let work8 = new Worker(__filename);
-  // let work9 = new Worker(__filename);
-  // let work10 = new Worker(__filename);
-  // let work11 = new Worker(__filename);
-  // let work12 = new Worker(__filename);
-  // let work13 = new Worker(__filename);
-  // let work14 = new Worker(__filename);
-  // let work15 = new Worker(__filename);  
-} else {  
-  const workerId = require('worker_threads').threadId
+const keyspaceCarousel = 
+`CREATE KEYSPACE IF NOT EXISTS Carousel
+with replication = {
+  'class': 'SimpleStrategy',
+  'replication_factor': 1
+}`;
 
-  const csv = createCsvStringifier ({    
-    header: [
-      { id: 'product', title: 'PRODUCT' },
-      { id: 'imageName', title: 'IMAGENAME' }, 
-      { id: 'color', title: 'COLOR' },
-      { id: 'url', title: 'IMAGEURL' },
-      { id: 'alt', title: 'ALT COLOR' }
-    ]
-  });
-  
-  let count = 1;
-  generateFakeData = () => {
-    let record = {}
-    record.id = count;
-    record.product = Math.floor(Math.random() * 750) + 1;
-    record.imageName = faker.commerce.productName();
-    record.color = faker.commerce.color();
-    record.url = faker.image.imageUrl();
-    record.alt = faker.commerce.color();           
-    count++
-    return record;
-  }
-  
-  const dataGenerator = (num) => {       
-    let records = [];
-    for(let i = 0; i < num; i++) {
-      let record = generateFakeData()      
-      records.push(record)
-    }   
-    return records;
-  }
+const imageCarouselTable = 
+`CREATE TABLE IF NOT EXISTS imageCarousel (
+  id text PRIMARY KEY,
+  product text,
+  imagename text,
+  color text,
+  url text,
+  relatedids text,
+  alt text
+)`;
 
-  
-  let time1 = performance.now()
-  let testData = dataGenerator(2000000);
-  // let dataJSON = JSON.stringify(testData);
-  let csvString = csv.stringifyRecords(testData);
-  const stream = fs.createWriteStream(`data/testData${workerId}.csv`);
-  stream.write(csvString);
-  stream.end();  
-  //csv.writeRecords(dataJSON);
-  let time2 = performance.now()
-  const time = time2 - time1;
-  console.log(`${workerId} took ${time} miliseconds to write ${testData.length} datapoints`)
+const additionsToCarousel =
+`CREATE TABLE IF NOT EXISTS additionsToCarousel (
+  id text PRIMARY KEY,
+  lastnumber int
+)` 
+
+client.connect()
+.then(() => {  
+  console.log('connected to database :')  
+})
+.then(() => {
+  client.execute(keyspaceCarousel)
+  .then(() => {
+    client.execute('use carousel')
+    .then(() => {
+      client.execute(imageCarouselTable)
+      .then(() => {
+        client.execute(additionsToCarousel)      
+        .catch((error) => {
+          console.log(error);
+        })
+      })
+    })
+  })
+})
 
 
 
-}
 
+// client.connect()
+// .then(() => {  
+//   console.log('connected to database :')  
+// .then(() => {
+//   client.execute(keyspaceCarousel)
+// }).then(() => {
+//   client.execute('use carousel;')
+// }).then(() => {
+//   client.execute(imageCarouselTable)
+// })
+// .catch((error) => {console.log(error)});

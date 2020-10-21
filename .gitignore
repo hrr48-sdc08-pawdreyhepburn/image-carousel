@@ -1,6 +1,5 @@
 node_modules
-<<<<<<< HEAD
-=======
 bundle.js
 .DS_Store
->>>>>>> ea0c987b43054c93a77fae6ddadc63cc33350026
+/data
+/logs
