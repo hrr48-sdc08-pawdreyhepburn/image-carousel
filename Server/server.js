@@ -119,9 +119,10 @@ app.delete('/products/delete/:id', function (req, res) {
 app.put('/products/update/:id', function (req, res) {
   var id = req.params.id
   var updateThis = req.body
-  Image.updateOne( {_id: id}, updateThis)
-  .then(() => {res.send(updateThis)})
-  .catch((error) => { res.send(error) });
+  let updateQuery = `update carousel.imagecarousel set alt='${updateThis.alt}', color='${updateThis.color}', imagename='${updateThis.color}', product='${updateThis.product}', relatedids='${updateThis.relatedids}', url='${updateThis.url}' where id='${id}'`
+  client.execute(updateQuery)
+  .then(() => {res.send('DB updated')})
+  .catch((error) => { res.send('error updating') });
 })
 
 
