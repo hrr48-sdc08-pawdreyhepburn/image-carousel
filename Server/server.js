@@ -103,8 +103,15 @@ app.post('/products/add/product', function (req, res) {
 
 
 app.delete('/products/delete/:id', function (req, res) {
-  var id = req.params.id
-  Image.deleteOne( {_id: id}, (error) => { res.send(error) } )
+  let id = req.params.id
+  let deleteQuery = `delete from carousel.imagecarousel where id='${id}'`
+  client.execute(deleteQuery)
+    .then(() => {
+      res.send('row deleted')
+    })
+    .catch((error) => {
+      res.send('error deleting the row');
+    });
 })
 
 
@@ -116,8 +123,6 @@ app.put('/products/update/:id', function (req, res) {
   .then(() => {res.send(updateThis)})
   .catch((error) => { res.send(error) });
 })
-
-
 
 
 module.exports = app;
