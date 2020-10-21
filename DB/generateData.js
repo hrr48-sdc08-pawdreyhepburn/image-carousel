@@ -38,28 +38,7 @@ if(isMainThread) {
     return ids.slice(0, -2);
   }
   
-  // let count = 1;
-  // generateFakeData = () => {
-  //   let record = {}
-  //   record._id = count;
-  //   record.product = Math.floor(Math.random() * 1000000) + 1;
-  //   record.imageName = faker.commerce.productName();
-  //   record.color = faker.commerce.color();
-  //   record.url = faker.image.imageUrl();
-  //   record.alt = faker.commerce.color();           
-  //   record.relatedids = generateRandomIds();
-  //   count++
-  //   return record;
-  // }
-  
-  // const dataGenerator = (num) => {       
-  //   let records = [];
-  //   for(let i = 0; i < num; i++) {
-  //     let record = generateFakeData()      
-  //     records.push(record)
-  //   }   
-  //   return records;
-  // }
+ 
   let count;
   if (workerId === 1) {
     count = 1;   
@@ -108,18 +87,14 @@ if(isMainThread) {
         } while (num > 0 && ok);
         if (num > 0) {
           stream.once('drain', closedWriter);
-        }
-                   
+        }                   
     }    
     closedWriter()
-  }
-
-  
-  
-  streamWriter(2000000);
-  
-  
-  
-  
+  }  
+  streamWriter(2000000); 
 }
+
+
+
+
 
