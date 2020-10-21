@@ -11,7 +11,6 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '/../dist')));
 
 
-// added template so we can now change items based on URL
 app.get('/:itemId', function(req, res) {
   res.send(template);
 });
@@ -75,7 +74,6 @@ app.get('/all/products', (req, res) => {
   })
 })
 
-
 app.post('/products/add/product', function (req, res) {
   let newProduct = req.body;  
   let newId;
@@ -100,8 +98,6 @@ app.post('/products/add/product', function (req, res) {
   })    
 });
 
-
-
 app.delete('/products/delete/:id', function (req, res) {
   let id = req.params.id
   let deleteQuery = `delete from carousel.imagecarousel where id='${id}'`
@@ -113,8 +109,6 @@ app.delete('/products/delete/:id', function (req, res) {
       res.send('error deleting the row');
     });
 })
-
-
 
 app.put('/products/update/:id', function (req, res) {
   var id = req.params.id
