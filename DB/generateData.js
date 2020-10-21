@@ -32,7 +32,7 @@ if(isMainThread) {
     let ids = '';    
     let randomNum = Math.floor(Math.random() * 8) + 3;    
     for(let i = 0; i < randomNum; i++) {
-      let randomId = Math.floor(Math.random() * 1000000) + 1;    
+      let randomId = Math.floor(Math.random() * 10000000) + 1;    
       ids += randomId.toString() + '-';
     }
     return ids.slice(0, -2);
@@ -60,8 +60,22 @@ if(isMainThread) {
   //   }   
   //   return records;
   // }
-
-  let count = 1;   
+  let count;
+  if (workerId === 1) {
+    count = 1;   
+  }
+  if (workerId === 2) {
+    count = 2000001;
+  }
+  if (workerId === 3) {
+    count = 4000001;
+  }
+  if (workerId === 4) {
+    count = 6000001;
+  }
+  if (workerId === 5) {
+    count = 8000001;
+  }
   let streamWriter = (numImages) => {    
     let time1 = performance.now()
     const stream = fs.createWriteStream(`data/testData${workerId}.csv`);

@@ -19,6 +19,12 @@ const imageCarouselTable =
   alt text
 )`;
 
+const additionsToCarousel =
+`CREATE TABLE IF NOT EXISTS additionsToCarousel (
+  id text PRIMARY KEY,
+  lastnumber int
+)` 
+
 client.connect()
 .then(() => {  
   console.log('connected to database :')  
@@ -29,8 +35,11 @@ client.connect()
     client.execute('use carousel')
     .then(() => {
       client.execute(imageCarouselTable)
-      .catch((error) => {
-        console.log(error);
+      .then(() => {
+        client.execute(additionsToCarousel)      
+        .catch((error) => {
+          console.log(error);
+        })
       })
     })
   })

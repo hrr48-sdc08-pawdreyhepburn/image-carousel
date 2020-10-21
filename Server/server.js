@@ -77,10 +77,27 @@ app.get('/all/products', (req, res) => {
 
 
 app.post('/products/add/product', function (req, res) {
-  newProduct = req.body;  
-  Image.create(newProduct) 
-    .then(() => {Image.find({}).then((results) => {res.send(results)})})   
-    .catch((error) => {res.send(error)})
+  let newProduct = req.body;  
+  let newId;
+  const query ='select * from carousel.additionstocarousel'
+  client.execute(query)
+  .then((result) => {
+    newId = (result.rows[0].lastnumber) + 1;
+  })
+  .then(() => {
+    const queryAdd = `insert into carousel.imagecarousel (id, alt, color, imagename, product, relatedids, url) 
+    values('${newId}', '${newProduct.alt}', '${newProduct.color}', '${newProduct.imagename}', '${newProduct.product}', '${newProduct.relatedids}', '${newProduct.url}')`;
+    client.execute(queryAdd)
+    .then(() => {
+      res.status(200).send('image received')
+      const changeLast = `update carousel.additionstocarousel set lastnumber=${newId} where id=' num'`;
+      client.execute(changeLast)
+      .catch((error) => {
+        console.log(error);
+        res.send('error adding a image');
+      })    
+    })
+  })    
 });
 
 
