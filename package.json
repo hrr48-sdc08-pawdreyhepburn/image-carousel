@@ -9,7 +9,8 @@
     "generateData": "node --experimental-worker DB/generateData.js",
     "generateKT": "node DB/seed.js",
     "seedDB": "dsbulk load -url ./data/testData1.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData2.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData3.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData4.csv -k carousel -t imagecarousel && dsbulk load -url ./data/testData5.csv -k carousel -t imagecarousel",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "postgresLoad": "node DB/image.js"
   },
   "repository": {
     "type": "git",
