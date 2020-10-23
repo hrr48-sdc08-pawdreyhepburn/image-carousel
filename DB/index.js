@@ -1,11 +1,10 @@
-const cassandra = require('cassandra-driver');
+const { Pool, Client } = require('pg');
+const client = new Client();
 
-const client = new cassandra.Client({ 
-  contactPoints:['127.0.0.1:9042'], 
-  credentials: {username: 'cassandra', password: 'cassandra'},
-  localDataCenter: 'datacenter1'
-});
-
+client.connect()
+.then(() => {
+  console.log('connected to database...')
+})
 
 
 module.exports = client;

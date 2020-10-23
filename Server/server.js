@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
+
+
 const client = require('../DB/index.js');
+
+
 app.use(express.json());
 const path = require('path');
 const babelPolyFill = require('@babel/polyfill');
@@ -15,14 +19,18 @@ app.get('/:itemId', function(req, res) {
   res.send(template);
 });
 
-app.get('/products/:product/', function(req, res) {  
-  let responseArr = [];  
+app.get('/products/:product/', function (req, res) {
+  let id =req.params.product 
   let likeItems;
-  let product = req.params.product;
-  let color = req.params.color;
-  const query = `SELECT * from carousel.imagecarousel where id = ?`
-  const params = [`${product}`];
-  client.execute(query, params)
+  let responseArr = []; 
+    let query = {
+    name: 'fetch id',  
+    text: `SELECT * FROM carousel.imagecarousel WHERE id = $1`,
+    values: [id]
+    }
+  
+
+  client.query(query)
   .then((results) => {
     let responseObj = {};
     responseObj._id = results.rows[0].id;
@@ -31,15 +39,18 @@ app.get('/products/:product/', function(req, res) {
     responseObj.imagename = results.rows[0].imagename;
     responseObj.alt = results.rows[0].alt;    
     likeItems = results.rows[0].relatedids.split('-');
-    responseArr.push(responseObj);    
+    responseArr.push(responseObj);        
   })
   .then(() => {
-    let count = 1;
+    let count = 0;
     for(let i = 0; i < likeItems.length; i++) {    
       let likeObj = {};
-      let likeItemQuery = `select * from carousel.imagecarousel where id = ?`;
-      let likeParams = [`${likeItems[i]}`];
-      client.execute(likeItemQuery, likeParams)
+      let likeItemQuery = {
+        name: 'fetch like ids',
+        text: `SELECT * FROM carousel.imagecarousel WHERE id = $1`,
+        values: [`${likeItems[i]}`]
+      }      
+      client.query(likeItemQuery)
       .then((result) => {      
         likeObj._id = result.rows[0].id;
         likeObj.url = result.rows[0].url;
@@ -48,9 +59,9 @@ app.get('/products/:product/', function(req, res) {
         likeObj.alt = result.rows[0].alt;
         responseArr.push(likeObj);            
         count++; 
-        if(count === likeItems.length) {
-        res.setHeader('Access-Control-Allow-Origin', '*'); 
-        res.send(responseArr);    
+        if(count === likeItems.length) {               
+          res.setHeader('Access-Control-Allow-Origin', '*');   
+          res.send(responseArr);                    
         }
       })       
       .catch((err) => {
@@ -58,65 +69,7 @@ app.get('/products/:product/', function(req, res) {
         res.send('error fetching like IDs');
       })            
     }  
-  }) 
-});
-
-
-app.get('/all/products', (req, res) => {
-  const query = `select * from carousel.imagecarousel`;
-  client.execute(query)
-  .then((results) => {
-    res.send(results)
-  })
-  .catch((error) => {
-    console.log(error);
-    res.send('error fetching all')
-  })
-})
-
-app.post('/products/add/product', function (req, res) {
-  let newProduct = req.body;  
-  let newId;
-  const query ='select * from carousel.additionstocarousel'
-  client.execute(query)
-  .then((result) => {
-    newId = (result.rows[0].lastnumber) + 1;
-  })
-  .then(() => {
-    const queryAdd = `insert into carousel.imagecarousel (id, alt, color, imagename, product, relatedids, url) 
-    values('${newId}', '${newProduct.alt}', '${newProduct.color}', '${newProduct.imagename}', '${newProduct.product}', '${newProduct.relatedids}', '${newProduct.url}')`;
-    client.execute(queryAdd)
-    .then(() => {
-      res.status(200).send('image received')
-      const changeLast = `update carousel.additionstocarousel set lastnumber=${newId} where id=' num'`;
-      client.execute(changeLast)
-      .catch((error) => {
-        console.log(error);
-        res.send('error adding a image');
-      })    
-    })
-  })    
-});
-
-app.delete('/products/delete/:id', function (req, res) {
-  let id = req.params.id
-  let deleteQuery = `delete from carousel.imagecarousel where id='${id}'`
-  client.execute(deleteQuery)
-    .then(() => {
-      res.send('row deleted')
-    })
-    .catch((error) => {
-      res.send('error deleting the row');
-    });
-})
-
-app.put('/products/update/:id', function (req, res) {
-  var id = req.params.id
-  var updateThis = req.body
-  let updateQuery = `update carousel.imagecarousel set alt='${updateThis.alt}', color='${updateThis.color}', imagename='${updateThis.color}', product='${updateThis.product}', relatedids='${updateThis.relatedids}', url='${updateThis.url}' where id='${id}'`
-  client.execute(updateQuery)
-  .then(() => {res.send('DB updated')})
-  .catch((error) => { res.send('error updating') });
+  })  
 })
 
 
