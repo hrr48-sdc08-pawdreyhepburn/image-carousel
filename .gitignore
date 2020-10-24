@@ -3,3 +3,5 @@ bundle.js
 .DS_Store
 /data
 /logs
+/newrelic.js
+/newrelic_agent.log

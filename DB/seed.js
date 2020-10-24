@@ -14,12 +14,24 @@ const imageCarouselTable =
   alt text  
 )`;
 
+const additionsToCarousel =
+`CREATE TABLE carousel.additions (
+  id SERIAL PRIMARY KEY,
+  lastnumber int
+)`
+
 client.query(createDB)
 .then(() => {
   client.query(`create schema carousel`)
 })
 .then(() => {
   client.query(imageCarouselTable)
+  
+})
+.then(() => {
+  client.query(additionsToCarousel)
   console.log(`DataBase and Table created`)
 })
-
+.catch((error) => {
+  console.log(error);
+})
