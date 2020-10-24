@@ -1,3 +1,4 @@
+require('newrelic');
 const express = require('express');
 const app = express();
 
@@ -71,6 +72,32 @@ app.get('/products/:product/', function (req, res) {
     }  
   })  
 })
+
+app.post('/products/add/product', function (req, res) {
+  let newProduct = req.body;  
+  let newId;
+  const query ='select * from carousel.additions'
+  client.query(query)
+  .then((result) => {
+    newId = (result.rows[0].lastnumber) + 1;
+  })
+  .then(() => {
+    const queryAdd = `INSERT INTO carousel.imagecarousel (imageid, alt, color, imagename, product, relatedids, url) 
+    values('${newId}', '${newProduct.alt}', '${newProduct.color}', '${newProduct.imagename}', '${newProduct.product}', '${newProduct.relatedids}', '${newProduct.url}')`;
+    client.query(queryAdd)
+    .then(() => {
+      res.status(200).send('image received')
+      const changeLast = `update carousel.additions set lastnumber=${newId} where id=1`;
+      client.query(changeLast)
+      .catch((error) => {
+        console.log(error);
+        res.send('error adding a image');
+      })    
+    })
+  })    
+});
+
+
 
 
 module.exports = app;
