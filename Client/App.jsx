@@ -71,12 +71,11 @@ class ImageCarousel extends React.Component {
     var productID;
     if(window.location.pathname.slice(1) === '') {
       productID = 1;
-    } else if (window.location.pathname.slice(1) >= 101) {
-      productID = 1;
-    } else {
+    } 
+     else {
       productID = window.location.pathname.slice(1);
     }
-    fetch(`http://localhost:3001/products/${productID}`)
+    fetch(`13.52.247.17/products/${productID}`)
     .then(res => res.json())
     .then((images) => {
       this.setState({
