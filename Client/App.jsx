@@ -75,7 +75,7 @@ class ImageCarousel extends React.Component {
      else {
       productID = window.location.pathname.slice(1);
     }
-    fetch(`13.52.247.17/products/${productID}`)
+    fetch(`/products/${productID}`)
     .then(res => res.json())
     .then((images) => {
       this.setState({
