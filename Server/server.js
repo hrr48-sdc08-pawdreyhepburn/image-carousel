@@ -16,6 +16,11 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '/../dist')));
 
 
+app.get('/loaderio-*', async (req, res) => {
+  res.status(200).send(req.originalUrl.slice(1, -1));
+});
+
+
 app.get('/:itemId', function(req, res) {
   res.send(template);
 });
