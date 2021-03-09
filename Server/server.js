@@ -1,19 +1,15 @@
 require('newrelic');
 const express = require('express');
 const app = express();
-
-
 const client = require('../DB/index.js');
-
-
 app.use(express.json());
 const path = require('path');
 const babelPolyFill = require('@babel/polyfill');
-const template = require('./template.js');
 const cors = require('cors');
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '/../dist')));
+app.use('/', express.static(path.join(__dirname, '/../dist')));
+app.use('/:itemId', express.static(path.join(__dirname, '/../dist')));
 
 
 app.get('/loaderio-*', async (req, res) => {
@@ -21,9 +17,9 @@ app.get('/loaderio-*', async (req, res) => {
 });
 
 
-app.get('/:itemId', function(req, res) {
-  res.send(template);
-});
+// app.get('/:itemId', function(req, res) {
+//   res.send(template);
+// });
 
 app.get('/products/:product/', function (req, res) {
   let id =req.params.product 

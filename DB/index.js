@@ -1,10 +1,6 @@
 const { Pool, Client } = require('pg');
-const client = new Client({
-  user: 'postgres',
-  host: '52.53.195.166',   
-  database: 'postgres', 
-  password: '1',
-  port: 5432
+const client = new Client({  
+  host: 'localhost',   
 });
 
 client.connect()
