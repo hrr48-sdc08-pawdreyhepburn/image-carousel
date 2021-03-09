@@ -2,10 +2,15 @@ const client = require('./index.js');
 
 const createDB = `CREATE DATABASE carousel`;
 
+const product = 
+`CREATE TABLE carousel.products (
+  id SERIAL PRIMARY KEY
+)`
+
 const imageCarouselTable = 
 `CREATE TABLE carousel.imageCarousel (
   id SERIAL PRIMARY KEY,
-  imageid int,
+  productid int FOREIGN KEY,
   product text,
   imagename text,
   color text,
@@ -25,8 +30,10 @@ client.query(createDB)
   client.query(`create schema carousel`)
 })
 .then(() => {
+  client.query(product)  
+})
+.then(() => {
   client.query(imageCarouselTable)
-  
 })
 .then(() => {
   client.query(additionsToCarousel)
