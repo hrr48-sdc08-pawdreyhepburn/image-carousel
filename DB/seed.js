@@ -10,8 +10,7 @@ const product =
 const imageCarouselTable = 
 `CREATE TABLE carousel.imageCarousel (
   id SERIAL PRIMARY KEY,
-  productid int FOREIGN KEY,
-  product text,
+  productid int FOREIGN KEY,  
   imagename text,
   color text,
   url text,
