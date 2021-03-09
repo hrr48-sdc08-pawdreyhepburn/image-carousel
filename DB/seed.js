@@ -13,8 +13,7 @@ const imageCarouselTable =
   productid int FOREIGN KEY,  
   imagename text,
   color text,
-  url text,
-  relatedids text,
+  url text,  
   alt text  
 )`;
 

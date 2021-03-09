@@ -22,21 +22,20 @@ if(isMainThread) {
       { id: 'alt', title: 'alt' },
       { id: 'color', title: 'color' },
       { id: 'imageName', title: 'imagename' }, 
-      { id: 'product', title: 'product' },
-      { id: 'relatedids', title: 'relatedids' },
+      { id: 'productid', title: 'productid' },     
       { id: 'url', title: 'url' }
     ]
   });
 
-  let generateRandomIds = () => {
-    let ids = '';    
-    let randomNum = Math.floor(Math.random() * 8) + 3;    
-    for(let i = 0; i < randomNum; i++) {
-      let randomId = Math.floor(Math.random() * 10000000) + 1;    
-      ids += randomId.toString() + '-';
-    }
-    return ids.slice(0, -2);
-  }
+  // let generateRandomIds = () => {
+  //   let ids = '';    
+  //   let randomNum = Math.floor(Math.random() * 8) + 3;    
+  //   for(let i = 0; i < randomNum; i++) {
+  //     let randomId = Math.floor(Math.random() * 10000000) + 1;    
+  //     ids += randomId.toString() + '-';
+  //   }
+  //   return ids.slice(0, -2);
+  // }
   
  
   let count;
@@ -66,14 +65,14 @@ if(isMainThread) {
       do { 
         num--;         
         let id = count;
-        let product = Math.floor(Math.random() * 1000000) + 1;
+        let productId = Math.floor(Math.random() * 1000000) + 1        
         let imagename = faker.commerce.productName();
         let color = faker.commerce.color();
         let url = faker.image.imageUrl();
         let alt = faker.commerce.color();           
         let relatedids = generateRandomIds();
         count++;     
-        let csvString = `${id},${alt},${color},${imagename},${product},${relatedids},${url}\n`;         
+        let csvString = `${id},${alt},${color},${imagename},${productId},${relatedids},${url}\n`;         
         if (num === 0) {                      
           stream.write(csvString, 'utf8', () => {          
           stream.end();
