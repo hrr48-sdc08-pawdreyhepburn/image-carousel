@@ -11,7 +11,8 @@ if(isMainThread) {
     let work2 = new Worker(__filename);
     let work3 = new Worker(__filename);
     let work4 = new Worker(__filename);
-    let work5 = new Worker(__filename);  
+    let work5 = new Worker(__filename);
+    let work6 = new Worker(__filename);  
  
 } else {  
   const workerId = require('worker_threads').threadId
@@ -19,11 +20,11 @@ if(isMainThread) {
   const csv = createCsvStringifier ({    
     header: [
       { id: 'id', title: 'id'},
-      { id: 'alt', title: 'alt' },
-      { id: 'color', title: 'color' },
+      { id: 'product_id', title: 'product_id' },     
       { id: 'imageName', title: 'imagename' }, 
-      { id: 'productid', title: 'productid' },     
-      { id: 'url', title: 'url' }
+      { id: 'color', title: 'color' },
+      { id: 'url', title: 'url' },
+      { id: 'alt', title: 'alt' },
     ]
   });
 
@@ -38,23 +39,8 @@ if(isMainThread) {
   // }
   
  
-  let count;
-  if (workerId === 1) {
-    count = 1;   
-  }
-  if (workerId === 2) {
-    count = 2000001;
-  }
-  if (workerId === 3) {
-    count = 4000001;
-  }
-  if (workerId === 4) {
-    count = 6000001;
-  }
-  if (workerId === 5) {
-    count = 8000001;
-  }
-  let streamWriter = (numImages) => {    
+  
+  let streamWriterImageTable = (numImages) => {    
     let time1 = performance.now()
     const stream = fs.createWriteStream(`data/testData${workerId}.csv`);
     let csvHeader = csv.getHeaderString();
@@ -65,14 +51,13 @@ if(isMainThread) {
       do { 
         num--;         
         let id = count;
-        let productId = Math.floor(Math.random() * 1000000) + 1        
+        let product_id = Math.floor(Math.random() * 1000000) + 1        
         let imagename = faker.commerce.productName();
         let color = faker.commerce.color();
         let url = faker.image.imageUrl();
-        let alt = faker.commerce.color();           
-        let relatedids = generateRandomIds();
+        let alt = faker.commerce.color();                   
         count++;     
-        let csvString = `${id},${alt},${color},${imagename},${productId},${relatedids},${url}\n`;         
+        let csvString = `${id},${product_id},${imagename},${color},${url},${alt}\n`;         
         if (num === 0) {                      
           stream.write(csvString, 'utf8', () => {          
           stream.end();
@@ -89,8 +74,62 @@ if(isMainThread) {
         }                   
     }    
     closedWriter()
-  }  
-  streamWriter(2000000); 
+  } 
+
+  let streamWriterProductTable = (num) => {    
+    let time1 = performance.now()
+    const stream = fs.createWriteStream(`data/testData${workerId}.csv`);
+    //let csvHeader = csv.getHeaderString();
+    //stream.write(csvHeader);   
+    let productCount = num
+    let product_id = 1 
+    const closedWriter = () => {   
+      let ok = true;         
+      do { 
+        productCount--;                       
+        product_id++;     
+        let csvString = `${product_id}\n`;         
+        if (productCount === 0) {                      
+          stream.write(csvString, 'utf8', () => {          
+          stream.end();
+          let time2 = performance.now()
+          const time = time2 - time1;
+          console.log(`${workerId} took ${time} miliseconds to write ${product_id} datapoints`)
+          });
+        } else {                                    
+          ok = stream.write(csvString, 'utf8');          
+        }       
+        } while (productCount > 0 && ok);
+        if (productCount > 0) {
+          stream.once('drain', closedWriter);
+        }                   
+    }    
+    closedWriter()
+  } 
+
+
+  
+  let count;
+  if (workerId === 1) {
+    count = 1;   
+  }
+  if (workerId === 2) {
+    count = 5000001;
+  }
+  if (workerId === 3) {
+    count = 10000001;
+  }
+  if (workerId === 4) {
+    count = 15000001;
+  }
+  if (workerId === 5) {
+    count = 20000001;
+  }
+  if (workerId === 6) {
+    streamWriterProductTable(1000000)
+  } else {
+      streamWriterImageTable(5000000); 
+  }
 }
 
 

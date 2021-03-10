@@ -9,19 +9,17 @@ const product =
 
 const imageCarouselTable = 
 `CREATE TABLE carousel.imageCarousel (
-  id SERIAL PRIMARY KEY,
-  productid int FOREIGN KEY,  
+  id SERIAL,
+  product_id int,  
   imagename text,
   color text,
   url text,  
-  alt text  
+  alt text,
+  PRIMARY KEY(id)      
 )`;
 
-const additionsToCarousel =
-`CREATE TABLE carousel.additions (
-  id SERIAL PRIMARY KEY,
-  lastnumber int
-)`
+
+
 
 client.query(createDB)
 .then(() => {
@@ -33,8 +31,7 @@ client.query(createDB)
 .then(() => {
   client.query(imageCarouselTable)
 })
-.then(() => {
-  client.query(additionsToCarousel)
+.then(() => {  
   console.log(`DataBase and Table created`)
 })
 .catch((error) => {

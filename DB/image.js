@@ -1,27 +1,33 @@
 const client = require('./index.js');
 const { performance } = require('perf_hooks');
 
-// let loadCsv1 = \COPY carousel.imagecarousel(imageid, alt, color, imagename, product, relatedids, url) FROM '/Users/scott/git_repos/image_carousel/data/testData5.csv' DELIMITER ',' CSV HEADER
-let loadCsv2 = `\\COPY carousel.imagecarousel(imageid, alt, color, imagename, product, relatedids, url) FROM '${__dirname}/data/testData2.csv' DELIMITER ',' CSV HEADER`;
-let loadCsv3 = `\\COPY carousel.imagecarousel(imageid, alt, color, imagename, product, relatedids, url) FROM '${__dirname}/data/testData3.csv' DELIMITER ',' CSV HEADER`;
-let loadCsv4 = `\\COPY carousel.imagecarousel(imageid, alt, color, imagename, product, relatedids, url) FROM '${__dirname}/data/testData4.csv' DELIMITER ',' CSV HEADER`;
-let loadCsv5 = `\\COPY carousel.imagecarousel(imageid, alt, color, imagename, product, relatedids, url) FROM '${__dirname}/data/testData5.csv' DELIMITER ',' CSV HEADER`;
-let lastNum = `INSERT INTO carousel.additions(lastnumber) VALUES(10000000)`;
+let loadCsv6 = `COPY carousel.products(id) from '/Users/scott/git_repos/image_carousel/data/testData6.csv' CSV;`
+let loadCsv1 = `COPY carousel.imagecarousel(id, product_id, alt, color, imagename, url) FROM '/Users/scott/git_repos/image_carousel/data/testData1.csv' DELIMITER ',' CSV HEADER;`
+let loadCsv2 = `COPY carousel.imagecarousel(id, product_id, alt, color, imagename, url) FROM '/Users/scott/git_repos/image_carousel/data/testData2.csv' DELIMITER ',' CSV HEADER;`;
+let loadCsv3 = `COPY carousel.imagecarousel(id, product_id, alt, color, imagename, url) FROM '/Users/scott/git_repos/image_carousel/data/testData3.csv' DELIMITER ',' CSV HEADER;`;
+let loadCsv4 = `COPY carousel.imagecarousel(id, product_id, alt, color, imagename, url) FROM '/Users/scott/git_repos/image_carousel/data/testData4.csv' DELIMITER ',' CSV HEADER;`;
+let loadCsv5 = `COPY carousel.imagecarousel(id, product_id, alt, color, imagename, url) FROM '/Users/scott/git_repos/image_carousel/data/testData5.csv' DELIMITER ',' CSV HEADER;`;
+let foreign = `ALTER TABLE carousel.imageCarousel add foreign key (product_id) references carousel.products (id);`;
 
 let time1 = performance.now()
-client.query(loadCsv1)
+client.query(loadCsv6)
 .then(() => {
-  client.query(loadCsv2)
+  client.query(loadCsv1)
   .then(() => {
-    client.query(loadCsv3)
+    client.query(loadCsv2)
     .then(() => {
-      client.query(loadCsv4)
+      client.query(loadCsv3)
       .then(() => {
-        client.query(loadCsv5)
+        client.query(loadCsv4)
         .then(() => {
-          client.query(lastNum)
-          let time2 = performance.now();
-          console.log(`it took ${time2 - time1} milliseconds to load all data`);
+          client.query(loadCsv5)
+          .then(() => {
+            client.query(foreign)
+            .then(() => {          
+              let time2 = performance.now();
+              console.log(`it took ${time2 - time1} milliseconds to load all data`);
+            })
+          })
         })
         .catch((error) => {
           console.log(error);
@@ -30,3 +36,4 @@ client.query(loadCsv1)
     })
   })
 })
+
