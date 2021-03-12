@@ -50,14 +50,14 @@ if(isMainThread) {
       let ok = true;         
       do { 
         num--;         
-        let id = count;
+        let _id = count;
         let product_id = Math.floor(Math.random() * 1000000) + 1        
         let imagename = faker.commerce.productName();
         let color = faker.commerce.color();
         let url = faker.image.imageUrl();
         let alt = faker.commerce.color();                   
         count++;     
-        let csvString = `${id},${product_id},${imagename},${color},${url},${alt}\n`;         
+        let csvString = `${_id},${product_id},${imagename},${color},${url},${alt}\n`;         
         if (num === 0) {                      
           stream.write(csvString, 'utf8', () => {          
           stream.end();

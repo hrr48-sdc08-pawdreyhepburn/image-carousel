@@ -9,13 +9,13 @@ const product =
 
 const imageCarouselTable = 
 `CREATE TABLE carousel.imageCarousel (
-  id SERIAL,
+  _id SERIAL,
   product_id int,  
   imagename text,
   color text,
   url text,  
   alt text,
-  PRIMARY KEY(id)      
+  PRIMARY KEY(_id)      
 )`;
 
 

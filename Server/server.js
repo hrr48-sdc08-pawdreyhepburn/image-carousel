@@ -24,7 +24,7 @@ app.get('/products/:product/', function (req, res) {
     values: [id]
   }  
   client.query(query)
-  .then((results) => {
+  .then((results) => {    
     res.setHeader('Access-Control-Allow-Origin', '*');   
     res.send(results.rows)         
   }) 
